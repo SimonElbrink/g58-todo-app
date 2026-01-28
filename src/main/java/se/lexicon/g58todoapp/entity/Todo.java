@@ -2,8 +2,10 @@ package se.lexicon.g58todoapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Setter
 @Getter
@@ -31,9 +33,8 @@ public class Todo {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
-
-    // TODO: make sure to create/update this info. AUDITING? - Life Cycle methods
     private LocalDateTime updatedAt;
+
     private LocalDateTime dueDate;
 
     @ManyToOne
@@ -41,8 +42,10 @@ public class Todo {
 
     //TODO ATTACHMENT
 
-
-    // TODO Add one more Constructor, Title, description
+    public Todo(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 
     public Todo(String title, String description, LocalDateTime dueDate) {
         this.title = title;
@@ -64,5 +67,31 @@ public class Todo {
         this.assignedTo = assignedTo;
     }
 
-    // TODO : Equals & Hashcode
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Todo todo = (Todo) o;
+        return getId() != null && Objects.equals(getId(), todo.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
+
 }

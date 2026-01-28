@@ -3,19 +3,21 @@ package se.lexicon.g58todoapp.repo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import se.lexicon.g58todoapp.entity.Todo;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface TodoRepository extends JpaRepository<Todo, Long> {
-    
-    
-    // TODO : Tasks assigned to a specific Person
-    // TODO : 📌 Count all tasks assigned to a person
-    // TODO : ✅ Find completed tasks assigned to a specific person
-    
-    // TODO : 🔍 Find todos by title keyword (case-insensitive contains)
-    // TODO : ✅ Find todos by completed status
-    // TODO : 🗓️ Find todos between two due dates
-    // TODO :️ Find todo due before a specific date and not completed
-    // TODO :🔥 Find unfinished and overdue task
-    // TODO : Find tasks that are not assigned to anyone
-    // TODO : 📅 Find all with no due date
+
+
+    List<Todo> findByTitleContainingIgnoreCase(String title);
+    List<Todo> findByAssignedTo_Id(Long personId);
+    List<Todo> findByCompleted(boolean completed);
+    List<Todo> findByDueDateBetween(LocalDateTime start, LocalDateTime end);
+    List<Todo> findByDueDateBeforeAndCompletedFalse(LocalDateTime dateTime);
+    List<Todo> findByAssignedToIsNull();
+    List<Todo> findByCompletedFalseAndDueDateBefore(LocalDateTime dateTime);
+    List<Todo> findByAssignedTo_IdAndCompletedTrue(Long personId);
+    List<Todo> findByDueDateIsNull();
+    long countByAssignedTo_Id(Long personId);
     
 }
