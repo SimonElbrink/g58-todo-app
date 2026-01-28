@@ -9,6 +9,7 @@ import se.lexicon.g58todoapp.entity.Todo;
 import se.lexicon.g58todoapp.repo.AttachmentRepository;
 import se.lexicon.g58todoapp.repo.PersonRepository;
 import se.lexicon.g58todoapp.repo.TodoRepository;
+import se.lexicon.g58todoapp.service.PersonService;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,14 +22,23 @@ import java.util.Arrays;
 public class DataInitializer {
 
     @Bean
-    CommandLineRunner run(PersonRepository personRepository, TodoRepository todoRepository, AttachmentRepository attachmentRepository){
+    CommandLineRunner run(PersonRepository personRepository, TodoRepository todoRepository, AttachmentRepository attachmentRepository, PersonService personService){
         return args -> {
 
-            seedingData(personRepository, todoRepository);
+           // registerPerson(personService);
+
+//            seedingData(personRepository, todoRepository);
 
 
         };
     }
+
+    // TODO: See if you can get a email service to work?
+    private static void registerPerson(PersonService personService) {
+        personService.createPerson(new Person("Simon", "Actual_Address_Here@lexicon.se"));
+    }
+
+
 
     private static void seedingData(PersonRepository personRepository, TodoRepository todoRepository) throws IOException {
         Person dev1 = personRepository.save(new Person("Dev1", "dev1@test.se"));
