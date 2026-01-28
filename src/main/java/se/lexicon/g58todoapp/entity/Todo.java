@@ -5,7 +5,9 @@ import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -40,7 +42,8 @@ public class Todo {
     @ManyToOne
     private Person assignedTo;
 
-    //TODO ATTACHMENT
+    @OneToMany(mappedBy = "todo" , cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true )
+    private Set<Attachment> attachments = new HashSet<>();
 
     public Todo(String title, String description) {
         this.title = title;
@@ -76,6 +79,21 @@ public class Todo {
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+
+    // helper methods for managing attachments
+    public void addAttachment(Attachment attachment) {
+        if (attachments == null) {
+            attachments = new HashSet<>();
+        }
+        attachments.add(attachment);
+        attachment.setTodo(this); // sync back-reference
+    }
+
+    public void removeAttachment(Attachment attachment) {
+        attachments.remove(attachment);
+        attachment.setTodo(null); // disconnect both ways
     }
 
     @Override
