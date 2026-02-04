@@ -1,10 +1,12 @@
 package se.lexicon.g58todoapp.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import se.lexicon.g58todoapp.dto.PersonDto;
 import se.lexicon.g58todoapp.entity.Person;
 import se.lexicon.g58todoapp.repo.PersonRepository;
 import se.lexicon.notify.model.Email;
@@ -52,13 +54,13 @@ class PersonServiceTest {
         when(personRepository.findAll()).thenReturn(list); // if this method is called give this response ^ ( Mocking Data)
 
         //Act
-        List<Person> result = personService.findAll();
+        List<PersonDto> result = personService.findAll();
 
 
         //Assert
         assertEquals(2, result.size());
-        assertEquals(TEST_NAME, result.get(0).getName());
-        assertEquals(TEST_EMAIL, result.get(0).getEmail());
+        assertEquals(TEST_NAME, result.get(0).name());
+        assertEquals(TEST_EMAIL, result.get(0).email());
 
         verify(personRepository).findAll(); // Verify that this method was actually called.
 
