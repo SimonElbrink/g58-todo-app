@@ -30,7 +30,7 @@ public class Todo {
     private String description;
 
     @Column(nullable = false)
-    private Boolean completed = false;
+    private Boolean completed = Boolean.FALSE;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
