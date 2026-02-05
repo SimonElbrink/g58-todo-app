@@ -25,7 +25,18 @@ public class TodoService {
 
         // convert to dto.
 
-        return new TodoDto(save.getId(),
+        return TodoDto.builder()
+                .id(save.getId())
+                .title(save.getTitle())
+                .description(save.getDescription())
+                .dueDate(save.getDueDate())
+                .completed(save.getCompleted())
+                .createdAt(save.getCreatedAt())
+                .updatedAt(save.getUpdatedAt())
+                .assignedToId(save.getAssignedTo() != null ? save.getAssignedTo().getId() : null)
+                .numberOfAttachments(save.getAttachments().size())
+                .build();
+/*        return new TodoDto(save.getId(),
                 save.getTitle(),
                 save.getDescription(),
                 save.getDueDate(),
@@ -33,6 +44,7 @@ public class TodoService {
                 save.getCreatedAt(),
                 save.getUpdatedAt(),
                 save.getAssignedTo().getId(),
-                save.getAttachments().size());
+                save.getAttachments().size());*/
+
     }
 }
